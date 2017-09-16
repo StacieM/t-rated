@@ -11,6 +11,7 @@ var express     = require("express"),
     User        = require("./models/user"),
     session = require("express-session"),
     seedDB      = require("./seeds"),
+    keys        = require('./middleware/keys.js'),
     methodOverride = require("method-override");
 // configure dotenv
 require('dotenv').load();
@@ -23,7 +24,7 @@ var commentRoutes    = require("./routes/comments"),
 // assign mongoose promise library and connect to database
 mongoose.Promise = global.Promise;
 
-const databaseUri = process.env.MONGODB_URI || 'mongodb://stacie:password2017@ds161713.mlab.com:61713/t-rated';
+const databaseUri = process.env.MONGODB_URI || keys.mongoURI;
 
 mongoose.connect(databaseUri, { useMongoClient: true })
       .then(() => console.log(`Database connected`))
