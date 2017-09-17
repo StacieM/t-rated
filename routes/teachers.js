@@ -39,6 +39,35 @@ router.get("/", function(req, res){
   }
 });
 
+router.get("/search", function(req, res){
+    console.log(req.user);
+    if(req.query.search && req.xhr) {
+        const regex = new RegExp(escapeRegex(req.query.search), 'gi');
+        // Get all teachers from DB
+        console.log('req.query.search:\n' + req.query.search);
+        Teacher.find({name: regex}, function(err, allTeachers){
+           if(err){
+              console.log(err);
+           } else {
+              res.status(200).json(allTeachers);
+           }
+        });
+    } else {
+        // Get all teachers from DB
+        Teacher.find({}, function(err, allTeachers){
+           if(err){
+               console.log(err);
+           } else {
+              if(req.xhr) {
+                res.json(allTeachers);
+              } else {
+                res.render("teachers/search",{teachers: allTeachers, page: 'teachers'});
+              }
+           }
+        });
+    }
+  });
+
 //CREATE - add new teacher to DB
 router.post("/", isLoggedIn, isSafe, function(req, res){
   // get data from form and add to teacher array
@@ -55,11 +84,19 @@ router.post("/", isLoggedIn, isSafe, function(req, res){
     var lng = data.results[0].geometry.location.lng;
     var location = data.results[0].formatted_address;
     // var newTeacher = {name: name, image: image, description: desc, cost: cost, author:author, location: location, lat: lat, lng: lng};
-    var newTeacher = {name: name, image: image, description: desc, author:author, location: location, lat: lat, lng: lng};
+    var newTeacher = {
+        name: name, 
+        image: image, 
+        description: desc, 
+        author:author, 
+        location: location, 
+        lat: lat, 
+        lng: lng
+    };
     // Create a new teacher and save to DB
     Teacher.create(newTeacher, function(err, newlyCreated){
         if(err){
-            console.log(err);
+            req.flash('error', err);
         } else {
             //redirect back to teachers page
             console.log(newlyCreated);

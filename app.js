@@ -1,30 +1,31 @@
-var express     = require("express"),
-    app         = express(),
-    bodyParser  = require("body-parser"),
-    mongoose    = require("mongoose"),
-    passport    = require("passport"),
-    cookieParser = require("cookie-parser"),
-    LocalStrategy = require("passport-local"),
-    flash        = require("connect-flash"),
-    Teacher  = require("./models/teacher"),
-    Comment     = require("./models/comment"),
-    User        = require("./models/user"),
-    session = require("express-session"),
-    seedDB      = require("./seeds"),
-    keys        = require('./middleware/keys.js'),
-    methodOverride = require("method-override");
+var express             = require("express"),
+    app                 = express(),
+    bodyParser          = require("body-parser"),
+    mongoose            = require("mongoose"),
+    passport            = require("passport"),
+    cookieParser        = require("cookie-parser"),
+    LocalStrategy       = require("passport-local"),
+    flash               = require("connect-flash"),
+    Teacher             = require("./models/teacher"),
+    Comment             = require("./models/comment"),
+    User                = require("./models/user"),
+    session             = require("express-session"),
+    seedDB              = require("./seeds"),
+    keys                = require('./middleware/keys.js'),
+    methodOverride      = require("method-override");
 // configure dotenv
 require('dotenv').load();
 
 //requiring routes
-var commentRoutes    = require("./routes/comments"),
-    teacherRoutes = require("./routes/teachers"),
-    indexRoutes      = require("./routes/index")
+var commentRoutes       = require("./routes/comments"),
+    teacherRoutes       = require("./routes/teachers"),
+    indexRoutes         = require("./routes/index");
     
 // assign mongoose promise library and connect to database
 mongoose.Promise = global.Promise;
 
-const databaseUri = process.env.MONGODB_URI || keys.mongoURI;
+// const databaseUri = process.env.MONGODB_URI || keys.mongoURI;
+const databaseUri = keys.mongoURI;
 
 mongoose.connect(databaseUri, { useMongoClient: true })
       .then(() => console.log(`Database connected`))

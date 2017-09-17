@@ -23,5 +23,11 @@ var teacherSchema = new mongoose.Schema({
       }
    ]
 });
+teacherSchema.index({
+    name: 'text',
+    description: 'text',
+    location: 'text',
+    comments: 'text'
+});
 
 module.exports = mongoose.model("Teacher", teacherSchema);

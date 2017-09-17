@@ -17,7 +17,7 @@ router.get("/register", function(req, res){
 router.post("/register", function(req, res){
     var newUser = new User({
         username: req.body.username,
-        displayName: req.body.dispayName,
+        displayName: req.body.displayName,
         password: req.body.password
     });
     if(req.body.adminCode === process.env.ADMIN_CODE) {
